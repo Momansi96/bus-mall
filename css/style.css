@@ -1,3 +1,28 @@
-header{display: inline-block;}
-header img{width: 70px; float: left;}
-h1{font-size: 40px; float: left; margin-left: 20px; margin-top: 15px;}
+* {
+    box-sizing: border-box;
+  }
+header {display: inline-block; margin-left: 20px;}
+h1 {font-size: 40px; float: left; margin-left: 20px; margin-top: 15px;}
+footer {text-align: center; margin-top: 100px;}
+
+img {
+    display: block;
+    width: 150px;
+    float: left;
+    height: 150px;
+    border: 2px solid lightblue;
+  }
+  #imgContainer {
+    padding-left: 200px;
+    border: 2px solid black;
+    width: 700px;
+    margin: 0 auto;
+    height: 175px;
+    
+  }
+  #counter { margin-top: 100px; text-align: center;}
+  #numAttemp {text-align: center;}
+  /* #attempts {text-align: center;} */
+  #ulResults {float: left; margin-left: 20px; }
+
+  #logo {width: 70px; float: left;}
