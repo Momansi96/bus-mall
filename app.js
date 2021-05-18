@@ -3,7 +3,7 @@
 let attempts = 0;
 let maxAttempts = 25;
 let attemptsEl = document.getElementById('attempts');
-let items = [];
+itemImg.items = [];
 let itemsImagesNames = [];
 let itemsClicks = [];
 let itemsViews = [];
@@ -15,11 +15,28 @@ function itemImg(itemName) {
     this.source = 'img/' + itemName;
     this.clicks = 0;
     this.views = 0;
-    items.push(this);
+    itemImg.items.push(this); 
+    
     itemsImagesNames.push(this.itemName)
 }
 
-let itemImages = ['bag.jpg', 'banana.jpg', 'bathroom.jpg', 'boots.jpg', 'braekfast.jpg', 'bubblegum.jpg', 'chair.jpg', 'cthulhu.jpg', 'dog-duck.jpg', 'dragon.jpg', 'pen.jpg', 'pet-sweep.jpg', 'scissors.jpg', 'shark.jpg', 'sweep.png', 'tauntaun.jpg', 'unicorn.jpg', 'water-can.jpg', 'wine-glass.jpg']
+function settingItems() {
+    let data = JSON.stringify(itemImg.items);
+    console.log(data)
+    localStorage.setItem('sales', data);
+}
+function gettingItems() {
+    let stringObj = localStorage.getItem('sales');
+    // console.log(stringObj);
+    let normalObj = JSON.parse(stringObj);
+    // console.log(normalObj);
+    if (normalObj !== null) {
+        itemImg.items = normalObj;
+    }
+    renderImg(); 
+}
+
+let itemImages = ['bag.jpg', 'banana.jpg', 'bathroom.jpg', 'boots.jpg', 'breakfast.jpg', 'bubblegum.jpg', 'chair.jpg', 'cthulhu.jpg', 'dog-duck.jpg', 'dragon.jpg', 'pen.jpg', 'pet-sweep.jpg', 'scissors.jpg', 'shark.jpg', 'sweep.png', 'tauntaun.jpg', 'unicorn.jpg', 'water-can.jpg', 'wine-glass.jpg']
 
 for (let i = 0; i < itemImages.length; i++) {
     new itemImg (itemImages[i]);
@@ -27,8 +44,9 @@ for (let i = 0; i < itemImages.length; i++) {
 
 function generateImage() {
     
-    return Math.floor(Math.random() * items.length);
+    return Math.floor(Math.random() * itemImg.items.length);
 }
+
 
 let lImgEl = document.getElementById('leftImg');
 let rImgEl = document.getElementById('rightImg');
@@ -53,17 +71,17 @@ function renderImg() {
         rightImgIndex = generateImage(); 
     }
 
-    lImgEl.setAttribute('src', items[leftImgIndex].source);
-    lImgEl.setAttribute('title', items[leftImgIndex].source);
-    items[leftImgIndex].views++;
+    lImgEl.setAttribute('src', itemImg.items[leftImgIndex].source);
+    lImgEl.setAttribute('title', itemImg.items[leftImgIndex].source);
+    itemImg.items[leftImgIndex].views++;
 
-    rImgEl.setAttribute('src', items[rightImgIndex].source);
-    rImgEl.setAttribute('title', items[rightImgIndex].source);
-    items[rightImgIndex].views++;
+    rImgEl.setAttribute('src', itemImg.items[rightImgIndex].source);
+    rImgEl.setAttribute('title', itemImg.items[rightImgIndex].source);
+    itemImg.items[rightImgIndex].views++;
     
-    cImgEl.setAttribute('src', items[centerImgIndex].source);
-    cImgEl.setAttribute('title', items[centerImgIndex].source);
-    items[centerImgIndex].views++;
+    cImgEl.setAttribute('src', itemImg.items[centerImgIndex].source);
+    cImgEl.setAttribute('title', itemImg.items[centerImgIndex].source);
+    itemImg.items[centerImgIndex].views++;
 
     attemptsEl.textContent = attempts;
 }
@@ -73,27 +91,28 @@ lImgEl.addEventListener('click', handelClicks);
 rImgEl.addEventListener('click', handelClicks);
 cImgEl.addEventListener('click', handelClicks);
 
+
 function handelClicks(event) {
     attempts++;
     if (attempts <= maxAttempts) {
         console.log(event.target.id)
         if (event.target.id === 'leftImg') {
-            items[leftImgIndex].clicks++;
+            itemImg.items[leftImgIndex].clicks++;
         } else if (event.target.id === 'rightImg') {
-            items[rightImgIndex].clicks++;
+            itemImg.items[rightImgIndex].clicks++;
         } else if (event.target.id === 'centerImg') {
-            items[centerImgIndex].clicks++;
+            itemImg.items[centerImgIndex].clicks++;
         }
         renderImg();
     } else {
         let ulEl = document.getElementById('ulResults');
         let liEl;
-        for (let i = 0; i < items.length; i++) {
+        for (let i = 0; i < itemImg.items.length; i++) {
             liEl = document.createElement('li');
             ulEl.appendChild(liEl);
-            liEl.textContent = `${items[i].itemName} has ${items[i].views} views and has ${items[i].clicks} clicks.`
-            itemsClicks.push(items[i].clicks);
-            itemsViews.push(items[i].views);
+            liEl.textContent = `${itemImg.items[i].itemName} has ${itemImg.items[i].views} views and has ${itemImg.items[i].clicks} clicks.`
+            itemsClicks.push(itemImg.items[i].clicks);
+            itemsViews.push(itemImg.items[i].views);
         }
         lImgEl.removeEventListener('click', handelClicks);
         rImgEl.removeEventListener('click', handelClicks);
@@ -101,6 +120,8 @@ function handelClicks(event) {
         chartRender();
     }
 }
+settingItems();
+gettingItems(); 
 function chartRender() {
     var ctx = document.getElementById('myChart').getContext('2d');
     var myChart = new Chart(ctx, {
@@ -139,4 +160,5 @@ function chartRender() {
     });
 }
 
-console.log(items)
+console.log(itemImg.items)
+
